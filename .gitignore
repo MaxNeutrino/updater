@@ -1,0 +1,6 @@
+out
+build
+*.jar
+.idea
+.gradle
+*.info
