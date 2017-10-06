@@ -1,5 +1,6 @@
 import java.io.File
 import java.util.*
+import javax.swing.JOptionPane
 
 class Updater {
     private val appFileName = "app.jar"
@@ -19,14 +20,24 @@ class Updater {
 
     fun checkVersion() {
         val properties = Properties()
-        properties.load(downloader.readFileAsStream(appPropFileUrl))
+
+        try {
+            properties.load(downloader.readFileAsStream(appPropFileUrl))
+        } catch (e: Exception) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Can't load app properties. Check your internet connection",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE)
+            System.exit(1)
+        }
 
         val latestVersion = properties.getProperty("latest_version").toDouble()
         val latestVersionFileUrl = properties.getProperty("latest_app")
 
         println("Latest version: $latestVersion")
 
-        if(getCurrentVersion() < latestVersion) {
+        if(getCurrentVersion() < latestVersion || !File(appFileName).exists()) {
             updateApp(latestVersionFileUrl, latestVersion)
         } else {
             println("You're using latest app version")
@@ -39,7 +50,16 @@ class Updater {
         println("Downloading $appUrl")
 
         //Download file
-        downloader.downloadFile(appUrl, appFileName)
+        try {
+            downloader.downloadFile(appUrl, appFileName)
+        } catch (e: Exception) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Can't download application. $appUrl",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE)
+            System.exit(1)
+        }
 
         //Save current version info to file
         val properties = Properties()
