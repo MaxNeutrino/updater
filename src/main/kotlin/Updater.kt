@@ -4,7 +4,9 @@ import javax.swing.JOptionPane
 
 class Updater {
     private val appFileName = "app.jar"
-    private val appPropFileUrl = "https://gist.githubusercontent.com/denosauro/4390cdeb9e5458b065dacad72df0efb5/raw/5542aa3647b8e692c70ca2228bcab45542a4b3e9/app.properties"
+    private val appPropertiesFileName = "app.info"
+    private val appPropertiesUrl = "https://gist.githubusercontent.com/denosauro/4390cdeb9e5458b065dacad72df0efb5/raw/3e26d234c2fa8751da9dcd6b660d2992ed9f4b43/app.properties"
+
     private val downloader = Downloader()
 
     fun run() {
@@ -14,15 +16,11 @@ class Updater {
         runApplication()
     }
 
-    fun runFile(filePath: String) {
-        val proc = Runtime.getRuntime().exec("java -jar $filePath").waitFor()
-    }
-
     fun checkVersion() {
         val properties = Properties()
 
         try {
-            properties.load(downloader.readFileAsStream(appPropFileUrl))
+            properties.load(downloader.readFileAsStream(appPropertiesUrl))
         } catch (e: Exception) {
             JOptionPane.showMessageDialog(
                     null,
@@ -64,9 +62,22 @@ class Updater {
         //Save current version info to file
         val properties = Properties()
         properties.setProperty("current_version", version.toString())
-        properties.store(File("app.info").outputStream(), "")
+        properties.store(File(appPropertiesFileName).outputStream(), "")
 
         println("Done.")
+    }
+
+    fun deleteApp() {
+        val appFile = File(appFileName)
+
+        if(appFile.exists()) {
+            appFile.delete()
+        }
+
+        val currentProperties = File(appPropertiesFileName)
+        if(currentProperties.exists()) {
+            currentProperties.delete()
+        }
     }
 
     fun getCurrentVersion(): Double {
@@ -84,8 +95,17 @@ class Updater {
     }
 
     fun runApplication() {
-        runFile(appFileName)
+        val proc = Runtime.getRuntime().exec("java -jar $appFileName")
+        val inputStream = proc.inputStream
+        var b = -1
+        b = inputStream.read()
+        while (b != -1) {
+            System.out.write(b)
+            b = inputStream.read()
+        }
+        proc.waitFor()
     }
+
     companion object {
         @JvmStatic fun main(args: Array<String>) {
             Updater().run()
