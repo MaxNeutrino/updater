@@ -5,6 +5,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
+
 class Downloader {
 
     fun downloadFile(sourceURL: String, targetPath: String): Path
@@ -14,6 +15,10 @@ class Downloader {
         Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING)
 
         return targetPath
+    }
+
+    fun downloadWithDialog(sourceURL: String, targetPath: String) {
+
     }
 
     fun readFileAsStream(sourceURL: String): InputStream {
