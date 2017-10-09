@@ -2,29 +2,27 @@ import java.io.File
 import javax.swing.JOptionPane
 
 class Updater {
-    private val appFileName = "app.jar"
+    private val applicationFileName = "accountant.jar"
 
     private val downloader = Downloader()
 
     fun run() {
-        println("Starting updater...")
-
         runApplication()
     }
 
     fun updateAndRun(url: String) {
-        updateApp(url)
+        updateApplication(url)
         runApplication()
     }
 
 
-    fun updateApp(appUrl: String) {
+    fun updateApplication(appUrl: String) {
         println("Updating...")
         println("Downloading $appUrl")
 
         //Download file
         try {
-            downloader.downloadFile(appUrl, appFileName)
+            downloader.downloadFile(appUrl, applicationFileName)
         } catch (e: Exception) {
             JOptionPane.showMessageDialog(
                     null,
@@ -37,19 +35,22 @@ class Updater {
         println("Done.")
     }
 
-    fun deleteApp() {
-        val appFile = File(appFileName)
+    fun deleteApplication() {
+        val applicationFile = File(applicationFileName)
 
-        if(appFile.exists()) {
-            appFile.delete()
+        if(applicationFile.exists()) {
+            applicationFile.delete()
         }
     }
 
     fun runApplication() {
-        if(!File(appFileName).exists()) {
+        val applicationPath = File("").absolutePath +
+                File.separator + applicationFileName
+
+        if(!File(applicationPath).exists()) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Can't find application file.",
+                    "Can't find application file. $applicationPath",
                     "Error",
                     JOptionPane.ERROR_MESSAGE)
             System.exit(1)
@@ -61,13 +62,10 @@ class Updater {
                 else
                     System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
 
-        val appPath = File(Updater::class.java!!.protectionDomain.codeSource.location.toURI()).absolutePath +
-                File.separator + appFileName
-
         println(javaBin)
-        println(appPath)
+        println(applicationPath)
 
-        val command = arrayListOf<String>(javaBin, "-jar", appPath)
+        val command = arrayListOf<String>(javaBin, "-jar", applicationPath)
 
         //Start app
         val process = ProcessBuilder(command)
