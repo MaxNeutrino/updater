@@ -5,8 +5,6 @@ import kotlin.system.exitProcess
 class Updater {
     private val applicationFileName = "accountant.jar"
 
-    private val downloader = Downloader()
-
     fun run() {
         runApplication()
     }
@@ -20,17 +18,11 @@ class Updater {
         println("Updating...")
         println("Downloading $appUrl")
 
-        //Download file
-        try {
-            downloader.downloadWithDialog(appUrl, applicationFileName)
-        } catch (e: Exception) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Can't download application. $appUrl",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE)
-            //System.exit(1)
-        }
+        NewVersion.instance.url = appUrl
+        NewVersion.instance.targetPath = File("").absolutePath +
+                File.separator + applicationFileName
+
+        UpdaterApplication.main(emptyArray())
     }
 
     fun deleteApplication() {
