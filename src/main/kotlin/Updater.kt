@@ -1,5 +1,6 @@
 import java.io.File
 import javax.swing.JOptionPane
+import kotlin.system.exitProcess
 
 class Updater {
     private val applicationFileName = "accountant.jar"
@@ -12,7 +13,6 @@ class Updater {
 
     fun updateAndRun(url: String) {
         updateApplication(url)
-        runApplication()
     }
 
 
@@ -22,7 +22,7 @@ class Updater {
 
         //Download file
         try {
-            downloader.downloadFile(appUrl, applicationFileName)
+            downloader.downloadWithDialog(appUrl, applicationFileName)
         } catch (e: Exception) {
             JOptionPane.showMessageDialog(
                     null,
@@ -31,8 +31,6 @@ class Updater {
                     JOptionPane.ERROR_MESSAGE)
             //System.exit(1)
         }
-
-        println("Done.")
     }
 
     fun deleteApplication() {
@@ -53,7 +51,7 @@ class Updater {
                     "Can't find application file. $applicationPath",
                     "Error",
                     JOptionPane.ERROR_MESSAGE)
-            System.exit(1)
+            exitProcess(1)
         }
 
         val javaBin =
@@ -74,10 +72,11 @@ class Updater {
 
     companion object {
         @JvmStatic fun main(args: Array<String>) {
-            if(args.isNotEmpty())
+            if(args.isNotEmpty()) {
                 Updater().updateAndRun(args[0])
-
-            Updater().run()
+            } else {
+                Updater().run()
+            }
         }
     }
 

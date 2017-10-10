@@ -1,3 +1,4 @@
+import java.awt.EventQueue
 import java.io.File
 import java.io.InputStream
 import java.net.URL
@@ -18,7 +19,14 @@ class Downloader {
     }
 
     fun downloadWithDialog(sourceURL: String, targetPath: String) {
-
+        EventQueue.invokeLater {
+            val form = DownloadForm(
+                    sourceURL,
+                    targetPath,
+                    Updater()
+            )
+            form.isVisible = true
+        }
     }
 
     fun readFileAsStream(sourceURL: String): InputStream {
