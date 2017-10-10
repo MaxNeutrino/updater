@@ -30,12 +30,10 @@ class DownloadForm(val url:String, val targetPath: String, val updater: Updater)
         progressBar.isStringPainted = true
         progressBar.minimum = 0
         progressBar.maximum = 100
-        progressBar.setBounds(166, 99, 190, 20)
+        progressBar.setBounds(166, 99, 190, 24)
         contentPane.add(progressBar)
 
         EventQueue.invokeLater { BackgroundWorker().execute() }
-
-
     }
 
     inner class BackgroundWorker : SwingWorker<Void, Void>() {
@@ -58,9 +56,6 @@ class DownloadForm(val url:String, val targetPath: String, val updater: Updater)
                 connection.connect()
                 val fileLength = connection.contentLength
                 val input = BufferedInputStream(url.openStream())
-
-                // File Name
-                val source = url
 
                 // Copy file
                 var saveFile: String? = null
