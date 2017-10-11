@@ -13,7 +13,6 @@ class Updater {
         updateApplication(url)
     }
 
-
     fun updateApplication(appUrl: String) {
         println("Updating...")
         println("Downloading $appUrl")
