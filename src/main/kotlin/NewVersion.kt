@@ -6,5 +6,5 @@ class NewVersion private constructor() {
     }
 
     var url:String = ""
-    var targetPath = ""
+    var targetPath = "accountant.jar"
 }

@@ -51,9 +51,6 @@ class Updater {
                 else
                     System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
 
-        println(javaBin)
-        println(applicationPath)
-
         val command = arrayListOf<String>(javaBin, "-jar", applicationPath)
 
         //Start app
@@ -63,11 +60,10 @@ class Updater {
 
     companion object {
         @JvmStatic fun main(args: Array<String>) {
-            if(args.isNotEmpty()) {
+            if(args.isNotEmpty())
                 Updater().updateAndRun(args[0])
-            } else {
+            else
                 Updater().run()
-            }
         }
     }
 

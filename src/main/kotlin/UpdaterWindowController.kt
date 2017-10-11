@@ -32,9 +32,10 @@ class UpdaterWindowController {
         cancelButton.onAction = EventHandler<ActionEvent> { exitProcess(2) }
 
 
-        val doneHandler = EventHandler<WorkerStateEvent> { (progressBar.scene.window as Stage).close()
+        val doneHandler = EventHandler<WorkerStateEvent> {
+            (progressBar.scene.window as Stage).close()
             updater.runApplication()
-            }
+        }
 
         downloadTask.onSucceeded = doneHandler
         downloadTask.onFailed = doneHandler
